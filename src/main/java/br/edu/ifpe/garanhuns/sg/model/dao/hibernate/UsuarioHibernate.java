@@ -73,11 +73,12 @@ public class UsuarioHibernate implements UsuarioDAO {
         } finally {
             session.close();
         }
-        return null;}
+        return null;
+    }
 
     @Override
     public List<Usuario> recuperarTodos() {
-       Session session = HibernateUtil.getSession();
+        Session session = HibernateUtil.getSession();
         try {
             session.beginTransaction();
             List<Usuario> lista = session.createQuery("from " + Usuario.class.getName()).list();
@@ -95,6 +96,19 @@ public class UsuarioHibernate implements UsuarioDAO {
     @Override
     public void deletarEmCascata(Usuario u) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Usuario recuperarPorLogin(String login) {
+        try (Session session = HibernateUtil.getSession()) {
+            List<Usuario> Usuario = session.createQuery("from Usuario u where u.login = :login").setParameter("login", login).list();
+            if (Usuario != null) {
+                return Usuario.get(0);
+            }
+        } catch (Exception e) {
+            System.err.println("Falha ao recuperar o  Paciente por Cartão do SUS. Erro: " + e.toString());
+        }
+        return null;
     }
 
 }
