@@ -106,7 +106,7 @@ public class UsuarioHibernate implements UsuarioDAO {
                 return Usuario.get(0);
             }
         } catch (Exception e) {
-            System.err.println("Falha ao recuperar o  Paciente por Cartão do SUS. Erro: " + e.toString());
+            System.err.println("Falha ao recuperar o usuario por login. Erro: " + e.toString());
         }
         return null;
     }

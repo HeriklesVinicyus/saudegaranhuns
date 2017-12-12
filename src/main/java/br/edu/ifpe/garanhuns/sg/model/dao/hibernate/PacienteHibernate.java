@@ -6,10 +6,10 @@
 package br.edu.ifpe.garanhuns.sg.model.dao.hibernate;
 
 import java.util.List;
-import javax.swing.JOptionPane;
 import br.edu.ifpe.garanhuns.sg.model.dao.interfaces.PacienteDAO;
 import br.edu.ifpe.garanhuns.sg.model.Paciente;
 import br.edu.ifpe.garanhuns.sg.model.PostoSaude;
+import br.edu.ifpe.garanhuns.sg.model.Usuario;
 import org.hibernate.Session;
 import br.edu.ifpe.garanhuns.sg.util.HibernateUtil;
 
@@ -27,10 +27,16 @@ public class PacienteHibernate implements PacienteDAO {
         try {
             session.beginTransaction();
             PostoSaude ps = ph.recuperarPorNome(o.getPostoSaude().getNome());
+            Usuario u = uH.recuperarPorLogin(o.getUsuario().getLogin());
             if (ps == null) {
                 ph.inserir(o.getPostoSaude());
             } else {
                 o.setPostoSaude(ps);
+            }
+            if (u == null) {
+                uH.inserir(o.getUsuario());
+            } else {
+                o.setUsuario(u);
             }
             uH.inserir(o.getUsuario());
             session.save(o);
@@ -47,18 +53,26 @@ public class PacienteHibernate implements PacienteDAO {
     public void atualizar(Paciente o) {
         Session session = HibernateUtil.getSession();
         PostoSaudeHibernate ph = new PostoSaudeHibernate();
+        UsuarioHibernate uH = new UsuarioHibernate();
         try {
             session.beginTransaction();
             PostoSaude ps = ph.recuperarPorNome(o.getPostoSaude().getNome());
+            Usuario u = uH.recuperarPorLogin(o.getUsuario().getLogin());
+
             if (ps == null) {
                 ph.inserir(o.getPostoSaude());
             } else {
                 o.setPostoSaude(ps);
             }
+            if (u == null) {
+                uH.inserir(o.getUsuario());
+            } else {
+                o.setUsuario(u);
+            }
             session.update(o);
             session.getTransaction().commit();
+            
         } catch (Exception e) {
-            session.getTransaction().rollback();
             System.err.println("Falha ao alterar Paciente. Erro: " + e.toString());
         } finally {
             session.close();
@@ -135,14 +149,16 @@ public class PacienteHibernate implements PacienteDAO {
 
     @Override
     public Paciente recuperarPorCartaoSus(String numeroCartao) {
-         try (Session session = HibernateUtil.getSession()) {
+        try (Session session = HibernateUtil.getSession()) {
             List<Paciente> pacientes = (session.createQuery("from Paciente p where p.cartaoSus = :numeroCartao").setParameter("numeroCartao", numeroCartao).list());
-            if(pacientes!=null)
+            if (pacientes != null) {
                 return pacientes.get(0);
-            
+            }
+
         } catch (Exception e) {
             System.err.println("Falha ao recuperar o  Paciente por Cartão do SUS. Erro: " + e.toString());
         }
-        return null;}
+        return null;
+    }
 
 }
