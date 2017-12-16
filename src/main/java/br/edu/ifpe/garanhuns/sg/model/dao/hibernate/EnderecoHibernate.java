@@ -23,7 +23,6 @@ public class EnderecoHibernate implements EnderecoDAO {
     public void inserir(Endereco o) {
         Session session = HibernateUtil.getSession();
         BairroHibernate bh = new BairroHibernate();
-        
         try {
             session.beginTransaction();
             Bairro b = bh.recuperarPorNome(o.getBairro().getNome());
@@ -31,7 +30,6 @@ public class EnderecoHibernate implements EnderecoDAO {
                 bh.inserir(o.getBairro());
                 session.save(o);
             }
-            //perguntar se isso faz sentido
             else{
                 o.setBairro(b);
                 session.save(o);

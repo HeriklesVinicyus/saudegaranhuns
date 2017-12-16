@@ -19,21 +19,19 @@ import br.edu.ifpe.garanhuns.sg.util.HibernateUtil;
  * @author Herikles
  */
 public class PostoSaudeHibernate implements PostoSaudeDAO {
-    
+
     @Override
     public void inserir(PostoSaude o) {
         Session session = HibernateUtil.getSession();
         EnderecoHibernate eh = new EnderecoHibernate();
-        
         try {
             session.beginTransaction();
-            Endereco b = eh.recuperarPorLogradouro(o.getEndereco().getLogradouro());
-            if (b == null) {
+            Endereco e = eh.recuperarPorLogradouro(o.getEndereco().getLogradouro());
+            if (e == null) {
                 eh.inserir(o.getEndereco());
                 session.save(o);
-            } //perguntar se isso faz sentido
-            else {
-                o.setEndereco(b);
+            } else {
+                o.setEndereco(e);
                 session.save(o);
             }
             session.getTransaction().commit();
@@ -44,20 +42,20 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
             session.close();
         }
     }
-    
+
     @Override
     public void atualizar(PostoSaude o) {
         Session session = HibernateUtil.getSession();
         EnderecoHibernate eh = new EnderecoHibernate();
         try {
             session.beginTransaction();
-            Endereco b = eh.recuperarPorLogradouro(o.getEndereco().getLogradouro());
-            if (b == null) {
+            Endereco e = eh.recuperarPorLogradouro(o.getEndereco().getLogradouro());
+            if (e == null) {
                 eh.inserir(o.getEndereco());
                 session.update(o);
             } //perguntar se isso faz sentido
             else {
-                o.setEndereco(b);
+                o.setEndereco(e);
                 session.update(o);
             }
             session.getTransaction().commit();
@@ -68,7 +66,7 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
             session.close();
         }
     }
-    
+
     @Override
     public void deletar(PostoSaude o) {
         Session session = HibernateUtil.getSession();
@@ -83,7 +81,7 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
             session.close();
         }
     }
-    
+
     @Override
     public PostoSaude recuperar(Integer id) {
         Session session = HibernateUtil.getSession();
@@ -97,7 +95,7 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
         }
         return null;
     }
-    
+
     @Override
     public List<PostoSaude> recuperarTodos() {
         Session session = HibernateUtil.getSession();
@@ -114,15 +112,15 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
         }
         return null;
     }
-    
+
     @Override
     public void deletarEmCascata(PostoSaude ps) {
         PacienteHibernate ph = new PacienteHibernate();
         AtendenteHibernate ah = new AtendenteHibernate();
-        
+
         List<Paciente> todosPacientes = ph.recuperarTodos();
         List<Atendente> todosAtendentes = ah.recuperarTodos();
-        
+
         for (Paciente p : todosPacientes) {
             if (p.getEndereco().getId() == ps.getId()) {
                 ph.deletar(p);
@@ -133,29 +131,21 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
                 ah.deletar(a);
             }
         }
-        
+
         deletar(ps);
     }
-    
+
     @Override
     public PostoSaude recuperarPorNome(String name) {
-        Session session = HibernateUtil.getSession();
-        try {
-            session.beginTransaction();
-            List<PostoSaude> postosaude = (session.createQuery("from " + PostoSaude.class.getName()).list());
-            for (PostoSaude p : postosaude) {
-                if (p.getNome().equals(name)) {
-                    return p;
-                }
-            }
-            session.getTransaction().commit();
+        try (Session session = HibernateUtil.getSession()) {
+            List<PostoSaude> posto = (session.createQuery("from Postosaude e where e.nome = :name").setParameter("name", name).list());
+            if(posto!=null)
+                return posto.get(0);
+            
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            System.err.println("Falha ao recuperar o  posto de saude por nome. Erro: " + e.toString());
-        } finally {
-            session.close();
+            System.err.println("Falha ao recuperar o  Endereço por nome. Erro: " + e.toString());
         }
         return null;
     }
-    
+
 }

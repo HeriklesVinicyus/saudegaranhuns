@@ -5,20 +5,16 @@
  */
 package br.edu.ifpe.garanhuns.sg.util;
 
-import java.time.LocalDate;
-import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.ConsultaHibernate;
-import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.EnderecoHibernate;
-import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.PacienteHibernate;
+import br.edu.ifpe.garanhuns.sg.model.Atendimento;
 import br.edu.ifpe.garanhuns.sg.model.Bairro;
-import br.edu.ifpe.garanhuns.sg.model.Consulta;
 import br.edu.ifpe.garanhuns.sg.model.Endereco;
-import br.edu.ifpe.garanhuns.sg.model.Paciente;
+import br.edu.ifpe.garanhuns.sg.model.HorarioAtendimento;
 import br.edu.ifpe.garanhuns.sg.model.PostoSaude;
-import br.edu.ifpe.garanhuns.sg.model.Usuario;
+import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.BairroHibernate;
+import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.HorarioAtendimentoHibernate;
+import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.PostoSaudeHibernate;
+import br.edu.ifpe.garanhuns.sg.model.enumarador.DiasSemana;
 import br.edu.ifpe.garanhuns.sg.model.enumarador.Especialidade;
-import br.edu.ifpe.garanhuns.sg.model.enumarador.PerfilUsuario;
-import br.edu.ifpe.garanhuns.sg.model.enumarador.Prioridade;
-import br.edu.ifpe.garanhuns.sg.model.enumarador.Status;
 
 /**
  *
@@ -27,21 +23,10 @@ import br.edu.ifpe.garanhuns.sg.model.enumarador.Status;
 public class NewClass {
 
     public static void main(String[] args) {
-        EnderecoHibernate eh = new EnderecoHibernate();
-        PacienteHibernate ph = new PacienteHibernate();
-        ConsultaHibernate cH = new ConsultaHibernate();
-        Endereco e = new Endereco("32", "Rua dos bobos", new Bairro("Juliana"));
-        //
-        Paciente p;
-        p = new Paciente("asdf", "321", LocalDate.of(2010, 11, 10), e, new PostoSaude("asd", e),new Usuario("login", "senha", PerfilUsuario.ADMINISTRADOR));
-        Consulta c = new Consulta(Especialidade.GERAL, Prioridade.IDOSO, Status.FILA, LocalDate.of(2017, 11, 24), LocalDate.of(2018, 1, 1), p);
-
-        eh.inserir(e);
-        ph.inserir(p);
-        cH.inserir(c);
-        System.out.println("%%%%%%%%%%%%%%%%%%%"+ph.recuperarPorCartaoSus("321"));
-        cH.alterarStatusConsulta(c, 2);
-        ph.recuperarPorCartaoSus("321");
-
+        HorarioAtendimentoHibernate hH = new HorarioAtendimentoHibernate();
+        hH.inserir(new HorarioAtendimento(DiasSemana.SEGUNDA, "08:00", "12:00", 10, new Atendimento(Especialidade.GERAL, new PostoSaude("Casa de deus", new Endereco("0", "Rua do cão 2", new Bairro("COHAB 6"))))));
+        hH.inserir(new HorarioAtendimento(DiasSemana.SEGUNDA, "08:00", "12:00", 10, new Atendimento(Especialidade.GERAL, new PostoSaude("Casa de deus", new Endereco("0", "Rua do cão 3", new Bairro("COHAB 5"))))));
+         System.out.println(new PostoSaudeHibernate().recuperarPorNome("Casa de deus"));
+        System.out.println(new BairroHibernate().recuperarPorNome("COHAB 6") + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
     }
 }
