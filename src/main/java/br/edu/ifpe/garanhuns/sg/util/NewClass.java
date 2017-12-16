@@ -24,11 +24,9 @@ public class NewClass {
 
     public static void main(String[] args) {
         HorarioAtendimentoHibernate hH = new HorarioAtendimentoHibernate();
-        System.out.println("zero%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         hH.inserir(new HorarioAtendimento(DiasSemana.SEGUNDA, "08:00", "12:00", 10, new Atendimento(Especialidade.GERAL, new PostoSaude("Casa de deus", new Endereco("0", "Rua do cão 2", new Bairro("COHAB 6"))))));
-        System.out.println("Primeiro%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
         hH.inserir(new HorarioAtendimento(DiasSemana.TERÇA, "08:00", "12:00", 10, new Atendimento(Especialidade.GERAL, new PostoSaude("Casa de deus2", new Endereco("0", "Rua do cão 3", new Bairro("COHAB 5"))))));
-        System.out.println("segundo%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
 
         System.out.println(new PostoSaudeHibernate().recuperarPorNome("Casa de deus"));
         System.out.println(new BairroHibernate().recuperarPorNome("COHAB 6") + "@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");

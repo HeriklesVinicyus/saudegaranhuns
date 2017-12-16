@@ -90,7 +90,7 @@ public class FilaAtendimentoHibernate implements FilaAtandimentoDAO {
             return lista;
         } catch (Exception e) {
             session.getTransaction().rollback();
-            System.err.println("Falha ao recuperar todos os Endereços. Erro: " + e.toString());
+            System.err.println("Falha ao recuperar todos os FilaAtendimento. Erro: " + e.toString());
         } finally {
             session.close();
         }

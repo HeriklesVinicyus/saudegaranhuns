@@ -142,7 +142,7 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
             }
 
         } catch (Exception e) {
-            System.err.println("Falha ao recuperar o  Endereço por nome. Erro: " + e.toString());
+            System.err.println("Falha ao recuperar o PostoSaude por nome. Erro: " + e.toString());
         }
         return null;
     }
