@@ -25,15 +25,14 @@ public class EnderecoHibernate implements EnderecoDAO {
         BairroHibernate bh = new BairroHibernate();
         try {
             session.beginTransaction();
+            System.out.println(o);
             Bairro b = bh.recuperarPorNome(o.getBairro().getNome());
-            if(b==null){
+            if (b == null) {
                 bh.inserir(o.getBairro());
-                session.save(o);
-            }
-            else{
+            } else {
                 o.setBairro(b);
-                session.save(o);
             }
+            session.save(o);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -46,20 +45,16 @@ public class EnderecoHibernate implements EnderecoDAO {
     @Override
     public void atualizar(Endereco o) {
         Session session = HibernateUtil.getSession();
-         BairroHibernate bh = new BairroHibernate();
+        BairroHibernate bh = new BairroHibernate();
         try {
             session.beginTransaction();
             Bairro b = bh.recuperarPorNome(o.getBairro().getNome());
-            if(b==null){
+            if (b == null) {
                 bh.inserir(o.getBairro());
-                session.update(o);
-            }
-            //perguntar se isso faz sentido
-            else{
+            } else {
                 o.setBairro(b);
-                session.update(o);
             }
-           
+            session.update(o);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -72,7 +67,7 @@ public class EnderecoHibernate implements EnderecoDAO {
     @Override
     public void deletar(Endereco o) {
         Session session = HibernateUtil.getSession();
-         BairroHibernate bh = new BairroHibernate();
+        BairroHibernate bh = new BairroHibernate();
         try {
             session.beginTransaction();
             session.delete(o);
@@ -104,7 +99,7 @@ public class EnderecoHibernate implements EnderecoDAO {
         Session session = HibernateUtil.getSession();
         try {
             session.beginTransaction();
-            
+
             List<Endereco> lista = session.createQuery("from " + Endereco.class.getName()).list();
             session.getTransaction().commit();
             return lista;
@@ -120,15 +115,15 @@ public class EnderecoHibernate implements EnderecoDAO {
     @Override
     public void deletarEmCascata(Endereco b) {
         PacienteHibernate ph = new PacienteHibernate();
-        
+
         List<Paciente> todosPacientes = ph.recuperarTodos();
-        
-        for(Paciente p :  todosPacientes){
-            if(p.getEndereco().getId() == b.getId()){
+
+        for (Paciente p : todosPacientes) {
+            if (p.getEndereco().getId() == b.getId()) {
                 ph.deletar(p);
             }
         }
-        
+
         deletar(b);
     }
 
@@ -136,11 +131,12 @@ public class EnderecoHibernate implements EnderecoDAO {
     public Endereco recuperarPorLogradouro(String name) {
         try (Session session = HibernateUtil.getSession()) {
             List<Endereco> enderecos = (session.createQuery("from Endereco e where e.logradouro = :name").setParameter("name", name).list());
-            if(enderecos!=null)
+            if (enderecos != null) {
                 return enderecos.get(0);
-            
+            }
+
         } catch (Exception e) {
-            System.err.println("Falha ao recuperar o  Endereço por nome. Erro: " + e.toString());
+            System.err.println("Falha ao recuperar o  Endereço por Logradouro. Erro: " + e.toString());
         }
         return null;
     }

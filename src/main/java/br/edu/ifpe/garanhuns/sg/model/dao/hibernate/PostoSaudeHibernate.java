@@ -29,11 +29,10 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
             Endereco e = eh.recuperarPorLogradouro(o.getEndereco().getLogradouro());
             if (e == null) {
                 eh.inserir(o.getEndereco());
-                session.save(o);
             } else {
                 o.setEndereco(e);
-                session.save(o);
             }
+            session.save(o);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -52,12 +51,11 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
             Endereco e = eh.recuperarPorLogradouro(o.getEndereco().getLogradouro());
             if (e == null) {
                 eh.inserir(o.getEndereco());
-                session.update(o);
-            } //perguntar se isso faz sentido
+            }
             else {
                 o.setEndereco(e);
-                session.update(o);
             }
+            session.update(o);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -138,10 +136,11 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
     @Override
     public PostoSaude recuperarPorNome(String name) {
         try (Session session = HibernateUtil.getSession()) {
-            List<PostoSaude> posto = (session.createQuery("from Postosaude e where e.nome = :name").setParameter("name", name).list());
-            if(posto!=null)
+            List<PostoSaude> posto = (session.createQuery("from PostoSaude p where p.nome = :name").setParameter("name", name).list());
+            if (posto != null) {
                 return posto.get(0);
-            
+            }
+
         } catch (Exception e) {
             System.err.println("Falha ao recuperar o  Endereço por nome. Erro: " + e.toString());
         }

@@ -112,24 +112,13 @@ public class ConsultaHibernate implements ConsultaDAO {
 
     @Override
     public List<Consulta> recuperarConsultasPorPaciente(Paciente c) {
-        Session session = HibernateUtil.getSession();
-        try {
-            session.beginTransaction();
-            List<Consulta> consultas = (session.createQuery("from " + Consulta.class.getName()).list());
-            List<Consulta> retorno = new ArrayList<>();
-            for (Consulta p : consultas) {
-                if (p.getPaciente().getNome().equals(c.getNome())) {
-                    retorno.add(p);
-                }
-            }
-            session.getTransaction().commit();
-            return retorno;
-
+        try (Session session = HibernateUtil.getSession()) {
+            List<Consulta> consulta = (session.createQuery("from Consulta c where c.CartaoSus = :cartao").setParameter("cartao", c.getCartaoSus()).list());
+            if(consulta!=null)
+                return consulta;
+            
         } catch (Exception e) {
-            session.getTransaction().rollback();
-            System.err.println("Falha ao recuperar os Pacientes por nome. Erro: " + e.toString());
-        } finally {
-            session.close();
+            System.err.println("Falha ao recuperar o Consultas Por Paciente. Erro: " + e.toString());
         }
         return null;
     }

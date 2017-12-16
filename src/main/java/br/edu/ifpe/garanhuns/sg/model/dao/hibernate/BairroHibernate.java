@@ -120,8 +120,9 @@ public class BairroHibernate implements BairroDAO {
     public Bairro recuperarPorNome(String name) {
         try (Session session = HibernateUtil.getSession()) {
             List<Bairro> bairros = (session.createQuery("from Bairro b where b.nome = :name").setParameter("name", name).list());
-            if(bairros!=null)
+            if(bairros!=null){
                 return bairros.get(0);
+            }
             
         } catch (Exception e) {
             System.err.println("Falha ao recuperar o Bairro por nome. Erro: " + e.toString());
