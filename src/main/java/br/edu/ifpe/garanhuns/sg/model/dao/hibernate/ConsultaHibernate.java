@@ -141,4 +141,11 @@ public class ConsultaHibernate implements ConsultaDAO {
         atualizar(c);
     }
 
+    @Override
+    public Consulta agendamento(Consulta c) {
+        Consulta consultaTemp;
+        
+        return c;
+    }
+
 }

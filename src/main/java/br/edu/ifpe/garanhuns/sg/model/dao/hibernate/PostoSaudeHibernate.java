@@ -137,7 +137,7 @@ public class PostoSaudeHibernate implements PostoSaudeDAO {
     public PostoSaude recuperarPorNome(String name) {
         try (Session session = HibernateUtil.getSession()) {
             List<PostoSaude> posto = (session.createQuery("from PostoSaude p where p.nome = :name").setParameter("name", name).list());
-            if (posto != null) {
+            if ((posto != null)||!posto.isEmpty() ) {
                 return posto.get(0);
             }
 

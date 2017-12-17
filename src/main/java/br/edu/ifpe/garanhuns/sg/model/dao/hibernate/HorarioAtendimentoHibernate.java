@@ -8,6 +8,7 @@ package br.edu.ifpe.garanhuns.sg.model.dao.hibernate;
 import java.util.List;
 import br.edu.ifpe.garanhuns.sg.model.dao.interfaces.HorarioAtendimentoDAO;
 import br.edu.ifpe.garanhuns.sg.model.HorarioAtendimento;
+import br.edu.ifpe.garanhuns.sg.model.PostoSaude;
 import org.hibernate.Session;
 import br.edu.ifpe.garanhuns.sg.util.HibernateUtil;
 
@@ -96,5 +97,23 @@ public class HorarioAtendimentoHibernate implements HorarioAtendimentoDAO {
         }
         return null;
     }
-}
 
+    @Override
+    public List<HorarioAtendimento> recuperarHorarioAtendimentoPorPostoSaude(PostoSaude ps) {
+        System.out.println("#########################" + ps.getId());
+        int test = 0;
+        try (Session session = HibernateUtil.getSession()) {
+            List<HorarioAtendimento> horariosAtendimento;
+            //HorariosAtendimento = (session.createQuery("from HorarioAtendimento h where h.atendimento_id in (select id from Atendimento a where a.postoSaude_id = :ps_id)").setParameter("ps_id", ps.getId()).list());
+            horariosAtendimento = session.createQuery("from Atendimento a where a.especialista = :name").setParameter("name", test).list();
+            System.out.println("####################&*&*&*&*&*&#####" + ps.getId());
+            if (horariosAtendimento != null) {
+                return horariosAtendimento;
+            }
+
+        } catch (Exception e) {
+            System.err.println("Falha ao recuperar o Horario Atendimento Por PostoSaude. Erro: " + e.toString());
+        }
+        return null;
+    }
+}

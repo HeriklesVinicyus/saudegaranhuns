@@ -16,5 +16,5 @@ import br.edu.ifpe.garanhuns.sg.model.Paciente;
 public interface ConsultaDAO extends DAO<Consulta> {
     List<Consulta> recuperarConsultasPorPaciente(Paciente c);
     public void  alterarStatusConsulta(Consulta c,int i);
-
+    public Consulta agendamento(Consulta c);
 }
