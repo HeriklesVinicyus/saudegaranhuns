@@ -104,7 +104,7 @@ public class HorarioAtendimentoHibernate implements HorarioAtendimentoDAO {
         int test = 0;
         try (Session session = HibernateUtil.getSession()) {
             List<HorarioAtendimento> horariosAtendimento;
-            horariosAtendimento = (session.createQuery("from HorarioAtendimento h where h.atendimento_id in (select id from Atendimento a where a.postoSaude_id = :ps_id)").setParameter("ps_id", ps.getId()).list());
+            horariosAtendimento = (session.createQuery("from HorarioAtendimento h where h.atendimento_id in (select id from Atendimento a where a.postoSaude_id = :id)").setParameter("id", ps.getId()).list());
             if (horariosAtendimento != null && !horariosAtendimento.isEmpty()) {
                 return horariosAtendimento;
             }
