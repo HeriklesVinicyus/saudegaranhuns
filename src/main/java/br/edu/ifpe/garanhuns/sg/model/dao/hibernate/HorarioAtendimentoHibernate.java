@@ -9,8 +9,13 @@ import java.util.List;
 import br.edu.ifpe.garanhuns.sg.model.dao.interfaces.HorarioAtendimentoDAO;
 import br.edu.ifpe.garanhuns.sg.model.HorarioAtendimento;
 import br.edu.ifpe.garanhuns.sg.model.PostoSaude;
+import br.edu.ifpe.garanhuns.sg.util.ConnectionJDBC;
 import org.hibernate.Session;
 import br.edu.ifpe.garanhuns.sg.util.HibernateUtil;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
@@ -100,13 +105,25 @@ public class HorarioAtendimentoHibernate implements HorarioAtendimentoDAO {
 
     @Override
     public List<HorarioAtendimento> recuperarHorarioAtendimentoPorPostoSaude(PostoSaude ps) {
+        
         System.out.println("#########################" + ps.getId());
-        int test = 0;
-        try (Session session = HibernateUtil.getSession()) {
-            List<HorarioAtendimento> horariosAtendimento;
-            horariosAtendimento = (session.createQuery("from HorarioAtendimento h where h.atendimento_id in (select id from Atendimento a where a.postoSaude_id = :id)").setParameter("id", ps.getId()).list());
+        try (Connection connection = new ConnectionJDBC().getConnection()) {
+            List<HorarioAtendimento> horariosAtendimento = new ArrayList<HorarioAtendimento>();
+            String sql ="select * from HorarioAtendimento h where h.atendimento_id in (	select id from Atendimento a where a.postoSaude_id = "+ps.getId()+")";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                HorarioAtendimento h_aux = new HorarioAtendimento();
+                System.out.println(rs.getString("atendimento_id"));
+            }
+            /*horariosAtendimento = (session.createQuery(
+                    "from HorarioAtendimento h"
+                    + " where h.atendimento_id in ("
+                    + "select id "
+                    + "from Atendimento a "
+                    + "where a.postoSaude_id = :id)").setParameter("id", ps.getId()).list());
             System.out.println("##############sldkfjlafj###########" + horariosAtendimento);
-            if (horariosAtendimento != null && !horariosAtendimento.isEmpty()) {
+           */ if (horariosAtendimento != null && !horariosAtendimento.isEmpty()) {
                 return horariosAtendimento;
             }
 
@@ -116,4 +133,3 @@ public class HorarioAtendimentoHibernate implements HorarioAtendimentoDAO {
         return null;
     }
 }
-
