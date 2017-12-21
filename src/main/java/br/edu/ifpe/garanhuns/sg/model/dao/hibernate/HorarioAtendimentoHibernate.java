@@ -105,31 +105,30 @@ public class HorarioAtendimentoHibernate implements HorarioAtendimentoDAO {
 
     @Override
     public List<HorarioAtendimento> recuperarHorarioAtendimentoPorPostoSaude(PostoSaude ps) {
-        
+       /* 
         System.out.println("#########################" + ps.getId());
-        try (Connection connection = new ConnectionJDBC().getConnection()) {
-            List<HorarioAtendimento> horariosAtendimento = new ArrayList<HorarioAtendimento>();
-            String sql ="select * from HorarioAtendimento h where h.atendimento_id in (	select id from Atendimento a where a.postoSaude_id = "+ps.getId()+")";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
+        try (Session session = HibernateUtil.getSession()) {
+            List<HorarioAtendimento> horariosAtendimento;
+          
+            //String sql ="select * from HorarioAtendimento h where h.atendimento_id in (	select id from Atendimento a where a.postoSaude_id = "+ps.getId()+")";
+            //PreparedStatement stmt = connection.prepareStatement(sql);
+            //ResultSet rs = stmt.executeQuery();
+            /*while (rs.next()) {
                 HorarioAtendimento h_aux = new HorarioAtendimento();
                 System.out.println(rs.getString("atendimento_id"));
             }
-            /*horariosAtendimento = (session.createQuery(
-                    "from HorarioAtendimento h"
-                    + " where h.atendimento_id in ("
-                    + "select id "
-                    + "from Atendimento a "
-                    + "where a.postoSaude_id = :id)").setParameter("id", ps.getId()).list());
-            System.out.println("##############sldkfjlafj###########" + horariosAtendimento);
-           */ if (horariosAtendimento != null && !horariosAtendimento.isEmpty()) {
+              HorarioAtendimento h = (HorarioAtendimento) (session.createSQLQuery("select * from HorarioAtendimento h where h.atendimento_id in (select id from Atendimento a where a.postoSaude_id = "+ps.getId()+")").list()).get(0);
+            for (HorarioAtendimento horarioAtendimento : horariosAtendimento) {
+                System.out.println(h.toString());
+                System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+            }
+           if (horariosAtendimento != null && !horariosAtendimento.isEmpty()) {
                 return horariosAtendimento;
             }
 
         } catch (Exception e) {
             System.err.println("Falha ao recuperar o Horario Atendimento Por PostoSaude. Erro: " + e.toString());
-        }
+        }*/
         return null;
     }
 }
