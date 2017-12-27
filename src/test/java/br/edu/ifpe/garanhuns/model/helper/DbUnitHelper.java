@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -28,14 +29,13 @@ public class DbUnitHelper {
 
     public DbUnitHelper(String xmlFolder) {
         this.xmlFolder = xmlFolder;
-
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conexao = DriverManager.getConnection("jdbc:mysql://localhost:3306/saudegaranhuns", "root", "root");
             conexaoDBUnit = new DatabaseConnection(conexao);
             DatabaseConfig config = conexaoDBUnit.getConfig();
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException | DatabaseUnitException e) {
             throw new RuntimeException("Erro inicializando DBUnit", e);
         }
     }
@@ -47,7 +47,7 @@ public class DbUnitHelper {
             IDataSet dataSet = builder.build(is);
 
             operation.execute(conexaoDBUnit, dataSet);
-        } catch (Exception e) {
+        } catch (SQLException | DatabaseUnitException e) {
             throw new RuntimeException("Erro executando DbUnit", e);
         }
     }
@@ -57,7 +57,7 @@ public class DbUnitHelper {
             conexaoDBUnit.close();
             conexao.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 }
