@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
@@ -28,6 +29,7 @@ public class DbUnitHelper {
     private String xmlFolder;
 
     public DbUnitHelper(String xmlFolder) {
+        JOptionPane.showMessageDialog(null, xmlFolder);
         this.xmlFolder = xmlFolder;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -36,6 +38,7 @@ public class DbUnitHelper {
             DatabaseConfig config = conexaoDBUnit.getConfig();
             config.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new MySqlDataTypeFactory());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException | DatabaseUnitException e) {
+            System.out.println("asdfasdf"+e);
             throw new RuntimeException("Erro inicializando DBUnit", e);
         }
     }
