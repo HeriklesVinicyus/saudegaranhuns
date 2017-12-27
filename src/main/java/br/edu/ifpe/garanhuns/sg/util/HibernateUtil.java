@@ -5,12 +5,8 @@
  */
 package br.edu.ifpe.garanhuns.sg.util;
 
-import br.edu.ifpe.garanhuns.sg.model.Bairro;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
