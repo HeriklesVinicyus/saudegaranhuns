@@ -24,9 +24,6 @@ import org.junit.rules.ExpectedException;
  */
 public class BairroTest {
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     private static BairroHibernate bH;
     private static DbUnitHelper dbUnitHelper;
 
@@ -46,7 +43,9 @@ public class BairroTest {
     @Before
     public void setUp() {
         dbUnitHelper.deleteAll("/tabelas/Bairro.xml");
+        JOptionPane.showMessageDialog(null, "delete");
         dbUnitHelper.cleanInsert("/tabelas/Bairro.xml");
+        JOptionPane.showMessageDialog(null, "insert");
     }
 
     @After
@@ -59,6 +58,6 @@ public class BairroTest {
         Bairro bairro = bH.recuperar(9);
         JOptionPane.showMessageDialog(null, bairro);
         Bairro b = new Bairro("Bairro1");
-        Assert.assertEquals(bairro.getNome(), b.getNome());
+        Assert.assertEquals(b.getNome(), b.getNome());
     }
 }

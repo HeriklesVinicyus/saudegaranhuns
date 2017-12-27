@@ -23,36 +23,45 @@ import org.dbunit.operation.TransactionOperation;
 public class DbUnitHelper {
 
     private final Connection connection = ConnectionHelper.getConnection();
-    
+
     public void cleanInsert(String resourcePath) {
         execute(resourcePath, TransactionOperation.CLEAN_INSERT);
     }
+
     public void truncateAndInsert(String resourcePath) {
         execute(resourcePath, TransactionOperation.TRUNCATE_TABLE);
         execute(resourcePath, TransactionOperation.INSERT);
     }
+
     public void insert(String resourcePath) {
         execute(resourcePath, DatabaseOperation.INSERT);
     }
+
     public void delete(String resourcePath) {
         execute(resourcePath, DatabaseOperation.DELETE);
     }
+
     public void deleteAll(String resourcePath) {
         execute(resourcePath, DatabaseOperation.DELETE_ALL);
     }
+
     public void truncate(String resourcePath) {
         execute(resourcePath, DatabaseOperation.TRUNCATE_TABLE);
     }
 
     private void execute(String resourcePath, DatabaseOperation... operations) {
+
         try (InputStream resourceAsStream = DbUnitHelper.class.getResourceAsStream(resourcePath)) {
             FlatXmlDataSetBuilder builder
                     = new FlatXmlDataSetBuilder();
+
             builder.setCaseSensitiveTableNames(true);
             IDataSet dataSet = builder.build(resourceAsStream);
+
             ReplacementDataSet replacementDataSet = new ReplacementDataSet(dataSet);
             replacementDataSet.addReplacementObject("[null]", null);
             IDatabaseConnection iConnection = new DatabaseConnection(connection);
+
             for (DatabaseOperation operation : operations) {
                 operation.execute(iConnection, replacementDataSet);
             }

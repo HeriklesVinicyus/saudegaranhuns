@@ -18,6 +18,7 @@ class ConnectionHelper {
 
     private ConnectionHelper() {
     }
+
     public static Connection getConnection() {
         try {
             ResourceBundle banco = ResourceBundle.getBundle("banco");
