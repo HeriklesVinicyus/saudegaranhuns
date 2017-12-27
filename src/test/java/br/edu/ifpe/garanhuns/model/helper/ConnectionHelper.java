@@ -20,7 +20,7 @@ class ConnectionHelper {
     }
     public static Connection getConnection() {
         try {
-            ResourceBundle banco = ResourceBundle.getBundle("bancoTest");
+            ResourceBundle banco = ResourceBundle.getBundle("banco");
             Class.forName(banco.getString("jdbc"));
             return DriverManager.getConnection(banco.getString("url"),
                     banco.getString("usuario"),

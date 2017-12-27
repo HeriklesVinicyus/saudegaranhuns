@@ -8,6 +8,7 @@ package br.edu.ifpe.garanhuns.model.testes;
 import br.edu.ifpe.garanhuns.model.helper.DbUnitHelper;
 import br.edu.ifpe.garanhuns.sg.model.Bairro;
 import br.edu.ifpe.garanhuns.sg.model.dao.hibernate.BairroHibernate;
+import javax.swing.JOptionPane;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -44,6 +45,7 @@ public class BairroTest {
 
     @Before
     public void setUp() {
+        dbUnitHelper.deleteAll("/tabelas/Bairro.xml");
         dbUnitHelper.cleanInsert("/tabelas/Bairro.xml");
     }
 
@@ -52,10 +54,11 @@ public class BairroTest {
         dbUnitHelper.deleteAll("/tabelas/Bairro.xml");
     }
 
-    /*@Test
+    @Test
     public void deveRetornarBairroPorId() {
         Bairro bairro = bH.recuperar(9);
-        Bairro b = new Bairro("COHAB 9");
+        JOptionPane.showMessageDialog(null, bairro);
+        Bairro b = new Bairro("Bairro1");
         Assert.assertEquals(bairro.getNome(), b.getNome());
-    }*/
+    }
 }
